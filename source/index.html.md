@@ -3,13 +3,9 @@ title: API Reference
 
 language_tabs:
   - shell
-  - ruby
-  - python
-  - javascript
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='#'>Obtener un API Key</a>
 
 includes:
   - errors
@@ -17,173 +13,225 @@ includes:
 search: true
 ---
 
-# Introduction
+# Introducción
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Bienvenido al Atlas API. Nuestro API ofrece le permiten acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, obtener informacion de sus saldos, historial de transacciones y acceso a su libreta de contactos.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Nuestro API usa servicios REST usando formato JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+ 
+# Authenticación
 
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
+> Para estar autorizado debe usar este código: 
 
 ```shell
-# With shell, you can just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+  -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
 ```
 
-```javascript
-const kittn = require('kittn');
+> Asegurate de reemplazar `YOUR_PRIVATE_KEY` con tu API Key
 
-let api = kittn.authorize('meowmeowmeow');
-```
+Atlas utiliza un API Key para el acceso a los diversos servicios. Si no posee un API Key puede obtener uno siguiendo los pasos para registrarse en nuestro [portal](http://developer.atlas.cl).
 
-> Make sure to replace `meowmeowmeow` with your API key.
+Para acceder a cada uno de los servicios de Atlas se espera que se agregue en el header su API key como se muestra acontinuación:
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: Bearer [YOUR_PRIVATE_KEY]`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+Debes reemplazar <code>YOUR_PRIVATE_KEY</code> con tu API Key
 </aside>
 
-# Kittens
+# Personas
 
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Consultar cuentas
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "https://api.atlas.com/v1/persons/accounts"
+    -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
+    -H "Content-Type: application/json"
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI"}'
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> El comando anterior retorna un resultado como el siguiente:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "name": "Cuenta 1",
+    "number": "00001",
+    "accounting_balance": 10,
+    "balance": 12,
+    "total_retentions": 2,
+    "type": "checking",
+    "currency": "national"
   },
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "name": "Cuenta 2",
+    "number": "00002",
+    "accounting_balance": 10,
+    "balance": 12,
+    "total_retentions": 2,
+    "type": "checking",
+    "currency": "national"
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+Este endpoint obtiene todas las productos que posee el usuario, con su saldo disponible, saldo total, el tipo de producto y el tipo de moneda.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST https://api.atlas.com/v1/persons/accounts`
 
-### Query Parameters
+### Body Parameters
 
-Parameter | Default | Description
+Parametro | Requerido | Descripción
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+bank | true | El nombre del banco del cual se desea extraer la información
+
+
+### Objeto Cuenta
+
+Atributo | Descripción
+--------- | -----------
+name | Nombre de la cuenta
+number | Número de la cuenta 
+accounting_balance | Saldo disponible
+balance | Saldo total de la cuenta
+total_retentions | Total de retenciones
+type | Tipo de producto
+currency | Tipo de moneda
+
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Recuerde incluir su API Key en la invocación del servicio
 </aside>
 
-## Get a Specific Kitten
+## Obtener Estado de Cuenta
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl "https://api.atlas.com/v1/persons/statements"
+    -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
+    -H "Content-Type: application/json"
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "account":"2312312312"}'
 ```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> El comando anterior retorna un resultado como el siguiente:
 
 ```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+[
+  {
+    "date": "12/03/1999",
+    "amount": 10,
+    "serial": "000001",
+    "description": "Depósito",
+    "type": "deposit"
+  },
+  {
+    "date": "12/03/1999",
+    "amount": -10,
+    "serial": "000002",
+    "description": "Transferencia entre cuentas del mismo banco",
+    "type": "credit"
+  }
+]
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+Este endpoint obtiene todas las transacciones realizadas durante el mes, la información que provee es la fecha, el monto, el código de la transacción y el tipo 
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`POST https://api.atlas.com/v1/persons/statements`
 
-### URL Parameters
+### Body Parameters
 
-Parameter | Description
+Parametro | Requerido | Descripción
+--------- | ------- | -----------
+username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+bank | true | El nombre del banco del cual se desea extraer la información
+account | true | El numero de la cuenta que se espera extraer la informacion
+
+
+### Objeto Transacción
+
+Atributo | Descripción
 --------- | -----------
-ID | The ID of the kitten to retrieve
+date | Es la fecha de la transacción
+amount | Cantidad de la transacción 
+serial | Código de referencia de la transacción
+description | Descripción de la transacción
+type | Tipo de la transacción
+
+<aside class="success">
+Recuerde incluir su API Key en la invocación del servicio
+</aside>
+
+
+## Obtener Contactos
+
+
+```shell
+curl "https://api.atlas.com/v1/persons/contacts"
+    -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
+    -H "Content-Type: application/json"
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI"}'
+```
+> El comando anterior retorna un resultado como el siguiente:
+
+```json
+[
+  {
+    "name": "Leonardo",
+    "bank": "Banco",
+    "nickname": "leo",
+    "numberId": "18.001.001-3",
+    "email": "prueba@gmail.com",
+    "number": "01231231231",
+    "accountType": "ahorro"
+  },
+  {
+    "name": "Juan",
+    "bank": "Banco",
+    "nickname": "JJ",
+    "numberId": "18.001.002-1",
+    "email": "prueba@gmail.com",
+    "number": "01231231231",
+    "accountType": "corriente"
+  }
+]
+```
+
+Este endpoint obtiene la información de los contactos registrado en su cuenta bancaria 
+
+### HTTP Request
+
+`POST https://api.atlas.com/v1/persons/contacts`
+
+### Body Parameters
+
+Parametro | Requerido | Descripción
+--------- | ------- | -----------
+username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+bank | true | El nombre del banco del cual se desea extraer la información
+
+### Objeto Contacto
+
+Atributo | Descripción
+--------- | -----------
+name | Es el nombre completo del contacto
+bank | Es el nombre del banco 
+nickname | Es el alias del contacto
+numberId | Es numero de identificación del contacto
+email | Es el correo del contacto
+number | Es el numero de la cuenta
+accountType | Es el tipo de la cuenta
+
+
+<aside class="success">
+Recuerde incluir su API Key en la invocación del servicio
+</aside>
 

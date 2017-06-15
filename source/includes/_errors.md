@@ -1,20 +1,15 @@
-# Errors
+# Errores
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files...just save them to the `includes` folder and add them to the top of your `index.md`'s frontmatter. Files are included in the order listed.</aside>
-
-The Kittn API uses the following error codes:
+Atlas API utiliza los siguientes códigos de errores
 
 
-Error Code | Meaning
+Codigo de Error | Significado
 ---------- | -------
-400 | Bad Request -- Your request sucks
-401 | Unauthorized -- Your API key is wrong
-403 | Forbidden -- The kitten requested is hidden for administrators only
-404 | Not Found -- The specified kitten could not be found
-405 | Method Not Allowed -- You tried to access a kitten with an invalid method
-406 | Not Acceptable -- You requested a format that isn't json
-410 | Gone -- The kitten requested has been removed from our servers
-418 | I'm a teapot
-429 | Too Many Requests -- You're requesting too many kittens! Slow down!
-500 | Internal Server Error -- We had a problem with our server. Try again later.
-503 | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
+400 | Bad Request -- Los datos de su petición son incorrectos
+401 | Unauthorized -- Su API Key no es valido
+403 | Forbidden -- No posee permisos para acceder al recurso
+404 | Not Found -- La información solicitada no fue encontrada
+405 | Method Not Allowed -- Usted esta intentando acceder un recurso con un metódo inválido
+406 | Not Acceptable -- Su petición no posee formato JSON
+500 | Internal Server Error -- Tuvimos un error en nuestro servidor. Intente más tarde.
+503 | Service Unavailable -- Estamos temporalmente en mantenimiento, por favor intente más tarde.
