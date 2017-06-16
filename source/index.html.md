@@ -15,7 +15,7 @@ search: true
 
 # Introducción
 
-Bienvenido al Atlas API. Nuestro API le ofrece acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, obtener informacion de sus saldos, historial de transacciones y acceso a su libreta de contactos.
+Bienvenido al Atlas API. Nuestro API le ofrece acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, dandóle la oportunidad de consultar sus saldos, el historial de transacciones y descargar su libreta de contactos.
 
 Nuestro API usa servicios REST usando formato JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
 
@@ -31,9 +31,9 @@ curl "api_endpoint_here"
 
 > Asegurate de reemplazar `YOUR_PRIVATE_KEY` con tu API Key
 
-Atlas utiliza un API Key para el acceso a los diversos servicios. Si no posee un API Key puede obtener uno siguiendo los pasos para registrarse en nuestro [portal](http://developer.atlas.cl).
+Atlas utiliza un API Key para el acceso de nuestros servicios. Si no posee un API Key puede obtener uno siguiendo los pasos para registrarse en nuestro [portal](http://developer.atlas.cl).
 
-Para acceder a cada uno de los servicios de Atlas se espera que se agregue en el header su API key como se muestra acontinuación:
+Para acceder a cada uno de los servicios de Atlas es requerido que se agregue en el header su API key como se muestra acontinuación:
 
 `Authorization: Bearer [YOUR_PRIVATE_KEY]`
 
@@ -87,8 +87,8 @@ Este endpoint obtiene todas las productos que posee el usuario, con su saldo dis
 
 Parametro | Requerido | Descripción
 --------- | ------- | -----------
-username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
-password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
 bank | true | El nombre del banco del cual se desea extraer la información
 
 
@@ -139,7 +139,7 @@ curl "https://api.atlas.com/v1/persons/statements"
 ]
 ```
 
-Este endpoint obtiene todas las transacciones realizadas durante el mes, la información que provee es la fecha, el monto, el código de la transacción y el tipo 
+Este endpoint obtiene todas las transacciones de la cuenta que fueron realizadas durante el mes, la información que se provee es la fecha, el monto, el código de la transacción y el tipo 
 
 ### HTTP Request
 
@@ -149,8 +149,8 @@ Este endpoint obtiene todas las transacciones realizadas durante el mes, la info
 
 Parametro | Requerido | Descripción
 --------- | ------- | -----------
-username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
-password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
 bank | true | El nombre del banco del cual se desea extraer la información
 account | true | El numero de la cuenta que se espera extraer la informacion
 
@@ -214,8 +214,8 @@ Este endpoint obtiene la información de los contactos registrado en su cuenta b
 
 Parametro | Requerido | Descripción
 --------- | ------- | -----------
-username | true | Es el nombre de usuario que normalmente se usar para hacer login en el portal del banco
-password | true | Es la contraseña que normalmente se usar para hacer login en el portal del banco 
+username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
 bank | true | El nombre del banco del cual se desea extraer la información
 
 ### Objeto Contacto
