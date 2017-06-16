@@ -15,7 +15,7 @@ search: true
 
 # Introducción
 
-Bienvenido al Atlas API. Nuestro API ofrece le permiten acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, obtener informacion de sus saldos, historial de transacciones y acceso a su libreta de contactos.
+Bienvenido al Atlas API. Nuestro API le ofrece acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, obtener informacion de sus saldos, historial de transacciones y acceso a su libreta de contactos.
 
 Nuestro API usa servicios REST usando formato JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
 
