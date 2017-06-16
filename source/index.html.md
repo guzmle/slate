@@ -225,7 +225,7 @@ Atributo | Descripción
 name | Es el nombre completo del contacto
 bank | Es el nombre del banco 
 nickname | Es el alias del contacto
-numberId | Es numero de identificación del contacto
+numberId | Es numero de identificación (RUT) del contacto
 email | Es el correo del contacto
 number | Es el numero de la cuenta
 accountType | Es el tipo de la cuenta

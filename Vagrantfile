@@ -1,6 +1,6 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
-  config.vm.network :forwarded_port, guest: 4567, host: 4567
+  config.vm.network :forwarded_port, guest: 80, host: 80
 
   config.vm.provision "bootstrap",
     type: "shell",
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
     run: "always",
     inline: <<-SHELL
       echo "=============================================="
-      echo "Starting up middleman at http://localhost:4567"
+      echo "Starting up middleman at http://localhost:80"
       echo "If it does not come up, check the ~/middleman.log file for any error messages"
       cd /vagrant
       bundle exec middleman server --force-polling --latency=1 &> ~/middleman.log &
