@@ -31,7 +31,7 @@ curl "api_endpoint_here"
 
 > Asegurate de reemplazar `YOUR_PRIVATE_KEY` con tu API Key
 
-Atlas utiliza un API Key para el acceso de nuestros servicios. Si no posee un API Key puede obtener uno siguiendo los pasos para registrarse en nuestro [portal](http://developer.atlas.cl).
+Atlas utiliza un API Key para el acceso de nuestros servicios. Si no posee un API Key solicítala contactándote con nuestro equipo.
 
 Para acceder a cada uno de los servicios de Atlas es requerido que se agregue en el header su API key como se muestra acontinuación:
 
