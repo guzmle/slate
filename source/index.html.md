@@ -19,7 +19,7 @@ Bienvenido al Atlas API. Nuestro API le ofrece acceder de manera fácil y segura
 
 Nuestro API usa servicios REST usando formato HAL+JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
 
-Nuestros endpoint trabajan de manera asícrona por lo que requieren que en cada petición se prevea una URL la cual nuestro servidor enviará la informacion recolectada como una peticion POST luego de concluir la operación.
+Nuestros endpoint trabajan de manera asícrona por lo que requieren que en cada petición se provea una URL la cual nuestro servidor enviará la informacion recolectada como una peticion POST luego de concluir la operación.
 
 
 # Authenticación
