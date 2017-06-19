@@ -17,9 +17,11 @@ search: true
 
 Bienvenido al Atlas API. Nuestro API le ofrece acceder de manera fácil y segura a cualquiera de sus cuentas que pertenecen a nuestra red de bancos registrados, dandóle la oportunidad de consultar sus saldos, el historial de transacciones y descargar su libreta de contactos.
 
-Nuestro API usa servicios REST usando formato JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
+Nuestro API usa servicios REST usando formato HAL+JSON para el envío y la recepción de información, además de implementar OAuth2.0 como mecanismo de autorización.
 
- 
+Nuestros endpoint trabajan de manera asícrona por lo que requieren que en cada petición se prevea una URL la cual nuestro servidor enviará la informacion recolectada como una peticion POST luego de concluir la operación.
+
+
 # Authenticación
 
 > Para estar autorizado debe usar este código: 
@@ -46,42 +48,73 @@ Debes reemplazar <code>YOUR_PRIVATE_KEY</code> con tu API Key
 ## Consultar cuentas
 
 ```shell
-curl "https://api.atlas.com/v1/persons/accounts"
+curl "http://mars.staging.atlasgo.cl/v1/person/accounts"
     -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
     -H "Content-Type: application/json"
-    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI"}'
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"santander", "callback":"https://mylink"}'
 ```
 
 > El comando anterior retorna un resultado como el siguiente:
 
 ```json
-[
-  {
-    "name": "Cuenta 1",
-    "number": "00001",
-    "accounting_balance": 10,
-    "balance": 12,
-    "total_retentions": 2,
-    "type": "checking",
-    "currency": "national"
+{
+  "_links": {
+    "self": {
+      "href": "/v1/person/accounts"
+    }
   },
-  {
-    "name": "Cuenta 2",
-    "number": "00002",
-    "accounting_balance": 10,
-    "balance": 12,
-    "total_retentions": 2,
-    "type": "checking",
-    "currency": "national"
+  "_embedded": {
+    "requests": [
+      {
+        "token": "adefcc2a6a7b2c40efd07c09c9b2b7a40155b236c638c3abb0a5a15c2f21c4ecc1e222e463cba4962307d0765bcd60c90950db9a818112b8e14a71bfbb053505115baca44d6ed01fb839e2a043654f5c3c6fbc"
+      }
+    ]
   }
-]
+}
 ```
 
-Este endpoint obtiene todas las productos que posee el usuario, con su saldo disponible, saldo total, el tipo de producto y el tipo de moneda.
+> Luego de procesado la petición el resultado que se enviará al link de callback será el siguiente:
+
+```json
+{
+  "data": {
+    "_links": {
+      "self": {
+        "href": "/v1/person/accounts"
+      }
+    },
+    "_embedded": {
+      "accounts": [
+          {
+            "name": "Cuenta 1",
+            "number": "00001",
+            "accounting_balance": 10,
+            "balance": 12,
+            "total_retentions": 2,
+            "type": "checking",
+            "currency": "national"
+          },
+          {
+            "name": "Cuenta 2",
+            "number": "00002",
+            "accounting_balance": 10,
+            "balance": 12,
+            "total_retentions": 2,
+            "type": "checking",
+            "currency": "national"
+          }
+      ]
+    }
+  }
+}
+```
+
+Este endpoint envía al callback todos las productos que posee el usuario, con su saldo disponible, saldo total, el tipo de producto y el tipo de moneda.
 
 ### HTTP Request
 
-`POST https://api.atlas.com/v1/persons/accounts`
+`POST http://mars.staging.atlasgo.cl/v1/person/accounts`
+
 
 ### Body Parameters
 
@@ -89,7 +122,16 @@ Parametro | Requerido | Descripción
 --------- | ------- | -----------
 username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
 password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
-bank | true | El nombre del banco del cual se desea extraer la información
+bank | true | El nombre del banco del cual se desea extraer la información 
+callback | true | Url donde se espera que la respuesta sea enviada a través de una peticion POST 
+
+
+### Banks List
+
+Parametro | Nombre
+--------- | -------
+santander | Banco Santander
+BCI | Banco BCI 
 
 
 ### Objeto Cuenta
@@ -113,37 +155,67 @@ Recuerde incluir su API Key en la invocación del servicio
 
 
 ```shell
-curl "https://api.atlas.com/v1/persons/statements"
+curl "http://mars.staging.atlasgo.cl/v1/person/statements"
     -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
     -H "Content-Type: application/json"
-    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "account":"2312312312"}'
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "account":"2312312312", "callback":"http://myurl.com"}'
 ```
 > El comando anterior retorna un resultado como el siguiente:
 
 ```json
-[
-  {
-    "date": "12/03/1999",
-    "amount": 10,
-    "serial": "000001",
-    "description": "Depósito",
-    "type": "deposit"
+{
+  "_links": {
+    "self": {
+      "href": "/v1/person/statements"
+    }
   },
-  {
-    "date": "12/03/1999",
-    "amount": -10,
-    "serial": "000002",
-    "description": "Transferencia entre cuentas del mismo banco",
-    "type": "credit"
+  "_embedded": {
+    "requests": [
+      {
+        "token": "adefcc2a6a7b2c40efd07c09c9b2b7a40155b236c638c3abb0a5a15c2f21c4ecc1e222e463cba4962307d0765bcd60c90950db9a818112b8e14a71bfbb053505115baca44d6ed01fb839e2a043654f5c3c6fbc"
+      }
+    ]
   }
-]
+}
+```
+
+> Luego de procesado la petición el resultado que se enviará al link de callback será el siguiente:
+
+```json
+{
+  "data": {
+    "_links": {
+      "self": {
+        "href": "/v1/person/statements"
+      }
+    },
+    "_embedded": {
+      "accounts": [
+          {
+            "date": "12/03/1999",
+            "amount": 10,
+            "serial": "000001",
+            "description": "Depósito",
+            "type": "deposit"
+          },
+          {
+            "date": "12/03/1999",
+            "amount": -10,
+            "serial": "000002",
+            "description": "Transferencia entre cuentas del mismo banco",
+            "type": "credit"
+          }
+      ]
+    }
+  }
+}
 ```
 
 Este endpoint obtiene todas las transacciones de la cuenta que fueron realizadas durante el mes, la información que se provee es la fecha, el monto, el código de la transacción y el tipo 
 
 ### HTTP Request
 
-`POST https://api.atlas.com/v1/persons/statements`
+`POST http://mars.staging.atlasgo.cl/v1/person/statements`
 
 ### Body Parameters
 
@@ -153,6 +225,7 @@ username | true | Es el nombre de usuario que normalmente se usa para hacer logi
 password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
 bank | true | El nombre del banco del cual se desea extraer la información
 account | true | El numero de la cuenta que se espera extraer la informacion
+callback | true | Url donde se espera que la respuesta sea enviada a través de una peticion POST 
 
 
 ### Objeto Transacción
@@ -174,41 +247,73 @@ Recuerde incluir su API Key en la invocación del servicio
 
 
 ```shell
-curl "https://api.atlas.com/v1/persons/contacts"
+curl "http://mars.staging.atlasgo.cl/v1/person/payees"
     -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
     -H "Content-Type: application/json"
-    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI"}'
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "callback":"http://myurl.com"}'
 ```
 > El comando anterior retorna un resultado como el siguiente:
 
+
 ```json
-[
-  {
-    "name": "Leonardo",
-    "bank": "Banco",
-    "nickname": "leo",
-    "numberId": "18.001.001-3",
-    "email": "prueba@gmail.com",
-    "number": "01231231231",
-    "accountType": "ahorro"
+{
+  "_links": {
+    "self": {
+      "href": "/v1/person/payees"
+    }
   },
-  {
-    "name": "Juan",
-    "bank": "Banco",
-    "nickname": "JJ",
-    "numberId": "18.001.002-1",
-    "email": "prueba@gmail.com",
-    "number": "01231231231",
-    "accountType": "corriente"
+  "_embedded": {
+    "requests": [
+      {
+        "token": "adefcc2a6a7b2c40efd07c09c9b2b7a40155b236c638c3abb0a5a15c2f21c4ecc1e222e463cba4962307d0765bcd60c90950db9a818112b8e14a71bfbb053505115baca44d6ed01fb839e2a043654f5c3c6fbc"
+      }
+    ]
   }
-]
+}
+```
+
+> Luego de procesado la petición el resultado que se enviará al link de callback será el siguiente:
+
+```json
+{
+  "data": {
+    "_links": {
+      "self": {
+        "href": "/v1/person/payees"
+      }
+    },
+    "_embedded": {
+      "accounts": [
+        {
+          "name": "NOMBRE 1",
+          "idNumber": "43242343",
+          "bank": "Corpbanca",
+          "accountNumber": "312312312312",
+          "email": "dasd@dasda.cl",
+          "nickname": "",
+          "accountType": "Cuenta Corriente"
+        },
+        {
+          "name": "NOMBRE 2",
+          "idNumber": "42342342342",
+          "bank": "Banco Santander",
+          "accountNumber": "31232312312",
+          "email": "ewqw@dasda.com",
+          "nickname": "",
+          "accountType": "Cuenta Corriente"
+        }
+      
+      ]
+    }
+  }
+}
 ```
 
 Este endpoint obtiene la información de los contactos registrado en su cuenta bancaria 
 
 ### HTTP Request
 
-`POST https://api.atlas.com/v1/persons/contacts`
+`POST http://mars.staging.atlasgo.cl/v1/person/payees`
 
 ### Body Parameters
 
@@ -217,6 +322,7 @@ Parametro | Requerido | Descripción
 username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
 password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
 bank | true | El nombre del banco del cual se desea extraer la información
+callback | true | Url donde se espera que la respuesta sea enviada a través de una peticion POST 
 
 ### Objeto Contacto
 
@@ -225,7 +331,7 @@ Atributo | Descripción
 name | Es el nombre completo del contacto
 bank | Es el nombre del banco 
 nickname | Es el alias del contacto
-numberId | Es numero de identificación (RUT) del contacto
+idNumber | Es numero de identificación (RUT) del contacto
 email | Es el correo del contacto
 number | Es el numero de la cuenta
 accountType | Es el tipo de la cuenta
