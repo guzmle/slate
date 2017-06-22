@@ -247,7 +247,7 @@ Recuerde incluir su API Key en la invocación del servicio
 
 
 ```shell
-curl "http://mars.staging.atlasgo.cl/v1/person/payees"
+curl "http://mars.staging.atlasgo.cl/v1/person/payee"
     -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
     -H "Content-Type: application/json"
     -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "callback":"http://myurl.com"}'
@@ -279,7 +279,7 @@ curl "http://mars.staging.atlasgo.cl/v1/person/payees"
   "data": {
     "_links": {
       "self": {
-        "href": "/v1/person/payees"
+        "href": "/v1/person/payee"
       }
     },
     "_embedded": {
@@ -313,7 +313,7 @@ Este endpoint obtiene la información de los contactos registrado en su cuenta b
 
 ### HTTP Request
 
-`POST http://mars.staging.atlasgo.cl/v1/person/payees`
+`POST http://mars.staging.atlasgo.cl/v1/person/payee`
 
 ### Body Parameters
 
