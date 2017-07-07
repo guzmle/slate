@@ -250,7 +250,7 @@ Recuerde incluir su API Key en la invocación del servicio
 curl "http://mars.staging.atlasgo.cl/v1/person/payee"
     -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
     -H "Content-Type: application/json"
-    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI", "callback":"http://myurl.com"}'
+    -d '{"username":"11.111.111-1","password":"0000", "bank":"BCI"}'
 ```
 > El comando anterior retorna un resultado como el siguiente:
 
@@ -272,7 +272,43 @@ curl "http://mars.staging.atlasgo.cl/v1/person/payee"
 }
 ```
 
-> Luego de procesado la petición el resultado que se enviará al link de callback será el siguiente:
+Este endpoint le indica al servidor que comience la busqueda de la información de los contactos registrado en su cuenta bancaria,
+ el token que regresa es utilizado para que usted pueda recuperar la información recolectada.
+
+### HTTP Request
+
+`POST http://mars.staging.atlasgo.cl/v1/person/payee`
+
+### Body Parameters
+
+Parametro | Requerido | Descripción
+--------- | ------- | -----------
+username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
+password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
+bank | true | El nombre del banco del cual se desea extraer la información 
+
+### Objeto Contacto
+
+Atributo | Descripción
+--------- | -----------
+token | Token temporal para poder invocar el servicio que recupera la información. 
+
+<aside class="success">
+Recuerde incluir su API Key en la invocación del servicio
+</aside>
+
+
+
+## Recuperar Contactos
+
+
+```shell
+curl "http://mars.staging.atlasgo.cl/v1/person/payee?token=[TOKEN]"
+    -H "Authorization: Bearer [YOUR_PRIVATE_KEY]"
+    -H "Content-Type: application/json"
+    -X GET
+```
+> El comando anterior retorna un resultado como el siguiente:
 
 ```json
 {
@@ -283,7 +319,7 @@ curl "http://mars.staging.atlasgo.cl/v1/person/payee"
       }
     },
     "_embedded": {
-      "accounts": [
+      "payees": [
         {
           "name": "NOMBRE 1",
           "idNumber": "43242343",
@@ -309,20 +345,17 @@ curl "http://mars.staging.atlasgo.cl/v1/person/payee"
 }
 ```
 
-Este endpoint obtiene la información de los contactos registrado en su cuenta bancaria 
+Este endpoint obtiene la información de los contactos que fueron recolectados en la petición de búsqueda
 
 ### HTTP Request
 
-`POST http://mars.staging.atlasgo.cl/v1/person/payee`
+`GET http://mars.staging.atlasgo.cl/v1/person/payee?token=:token`
 
 ### Body Parameters
 
 Parametro | Requerido | Descripción
 --------- | ------- | -----------
-username | true | Es el nombre de usuario que normalmente se usa para hacer login en el portal del banco
-password | true | Es la contraseña que normalmente se usa para hacer login en el portal del banco 
-bank | true | El nombre del banco del cual se desea extraer la información
-callback | true | Url donde se espera que la respuesta sea enviada a través de una peticion POST 
+token | true | Es el token temporal que la aplicación generó cuando se invocó el servicio de Consulta 
 
 ### Objeto Contacto
 
@@ -340,4 +373,3 @@ accountType | Es el tipo de la cuenta
 <aside class="success">
 Recuerde incluir su API Key en la invocación del servicio
 </aside>
-
